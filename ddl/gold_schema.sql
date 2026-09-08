@@ -1,6 +1,6 @@
 -- Gold layer for per-episode daily performance
 -- Grain: 1 row == 1 episode + 1 calendar day
-CREATE TABLE IF NOT EXISTS gold_episode_daily (
+CREATE OR REPLACE TABLE gold.gold_episode_daily (
   episode_id STRING,
   episode_title STRING,
   event_date DATE,
@@ -14,7 +14,7 @@ COMMENT 'Daily play/complete counts per episode, for "top episodes" analytics';
 
 -- Gold layer for per-user engagement summary
 -- Grain: 1 row == 1 user
-CREATE TABLE IF NOT EXISTS gold_user_engagement (
+CREATE OR REPLACE TABLE gold.gold_user_engagement (
   user_id STRING,
   country STRING,
   listen_events BIGINT,
@@ -26,7 +26,7 @@ COMMENT 'Per-user listening summary for engagement analytics';
 
 -- Gold layer for listen-through rate by country
 -- Grain: 1 row == 1 country
-CREATE TABLE IF NOT EXISTS gold_country_ltr (
+CREATE OR REPLACE TABLE gold.gold_country_ltr (
   country STRING,
   avg_listen_through_rate DOUBLE,
   completions BIGINT

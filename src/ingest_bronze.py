@@ -34,7 +34,7 @@ class BronzeIngestor:
             raw_df = self.spark.read.csv(file_path, header=True, inferSchema=False)
             bronze_df = append_metadata_and_cast(raw_df)
             
-            bronze_df.write.format("delta").mode("append").saveAsTable(full_table_name)
+            bronze_df.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(full_table_name)
                 
             logger.info(f"Successfully ingested {file_path} into {full_table_name}")
         except Exception as e:
@@ -53,7 +53,7 @@ class BronzeIngestor:
             raw_df = self.spark.read.json(file_path)
             bronze_df = append_metadata_and_cast(raw_df)
             
-            bronze_df.write.format("delta").mode("append").saveAsTable(full_table_name)
+            bronze_df.write.format("delta").mode("overwrite").option("overwriteSchema", "true").saveAsTable(full_table_name)
                 
             logger.info(f"Successfully ingested {file_path} into {full_table_name}")
         except Exception as e:

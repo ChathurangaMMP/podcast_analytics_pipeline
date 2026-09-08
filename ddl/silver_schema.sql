@@ -2,7 +2,7 @@
 -- Grain: 1 row == 1 valid event (user_id, episode_id, event_type, event_ts)
 -- Business key: (user_id, episode_id, event_type, event_ts)
 -- Partitioned by event_date -> matches common time-range query patterns and keeps partitions small/pruneable
-CREATE TABLE IF NOT EXISTS silver_events (
+CREATE OR REPLACE TABLE silver.silver_events (
   user_id STRING,
   episode_id STRING,
   podcast_id STRING,
@@ -24,7 +24,7 @@ COMMENT 'Cleaned, validated, deduplicated events enriched with user/episode refe
 
 
 -- Quarantine table for rows that failed DQ checks (nulls, bad event_type, bad ts)
-CREATE TABLE IF NOT EXISTS silver_events_rejected (
+CREATE OR REPLACE TABLE silver.silver_events_rejected (
   event_type STRING,
   user_id STRING,
   episode_id STRING,
