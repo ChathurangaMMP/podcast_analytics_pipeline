@@ -1,4 +1,4 @@
-from logger import logger
+from .logger import logger
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import current_timestamp, input_file_name, col
 
@@ -28,16 +28,17 @@ class BronzeIngestor:
         """
 
         file_path = f"{self.source_dir}/{file_name}"
+        full_table_name = f"{self.target_db}.{table_name}"
         logger.info(f"Starting ingestion for {table_name} from {file_path}")
         try:
             raw_df = self.spark.read.csv(file_path, header=True, inferSchema=False)
             bronze_df = append_metadata_and_cast(raw_df)
             
-            bronze_df.write.format("delta").mode("append").saveAsTable(table_name)
+            bronze_df.write.format("delta").mode("append").saveAsTable(full_table_name)
                 
-            logger.info(f"Successfully ingested {file_path} into {table_name}")
+            logger.info(f"Successfully ingested {file_path} into {full_table_name}")
         except Exception as e:
-            logger.error(f"Failed to ingest {table_name}: {str(e)}")
+            logger.error(f"Failed to ingest {full_table_name}: {str(e)}")
             raise
 
     def ingest_events(self, file_name: str, table_name: str):
@@ -46,15 +47,16 @@ class BronzeIngestor:
         """
 
         file_path = f"{self.source_dir}/{file_name}"
+        full_table_name = f"{self.target_db}.{table_name}"
         logger.info(f"Starting ingestion for {table_name} from {file_path}")
         try:
             raw_df = self.spark.read.json(file_path)
             bronze_df = append_metadata_and_cast(raw_df)
             
-            bronze_df.write.format("delta").mode("append").saveAsTable(table_name)
+            bronze_df.write.format("delta").mode("append").saveAsTable(full_table_name)
                 
-            logger.info(f"Successfully ingested {file_path} into {table_name}")
+            logger.info(f"Successfully ingested {file_path} into {full_table_name}")
         except Exception as e:
-            logger.error(f"Failed to ingest {table_name}: {str(e)}")
+            logger.error(f"Failed to ingest {full_table_name}: {str(e)}")
             raise
 
