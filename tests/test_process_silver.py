@@ -27,12 +27,9 @@ def test_process_events_obt(spark):
         .saveAsTable(f"{source_db}.bronze_users")
 
     spark.createDataFrame(
-        [("E1", "P1", "Ep 1", "2023-01-01", "1000")],
-        ["episode_id", "podcast_id", "episode_title", "release_date", "episode_duration"]
-    ).write \
-        .format("delta") \
-        .mode("overwrite") \
-        .saveAsTable(f"{source_db}.bronze_episodes")
+        [("E1", "P1", "Ep 1", "2023-01-01", "1000")], 
+        ["episode_id", "podcast_id", "title", "release_date", "duration_seconds"] 
+    ).write.format("delta").mode("overwrite").saveAsTable(f"{source_db}.bronze_episodes")
 
     events_data = [
         ("play","U1", "E1", "2023-10-01T10:00:00", 500, "f1", "2023-10-01"),
